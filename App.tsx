@@ -122,8 +122,10 @@ const App: React.FC = () => {
 
     setIsGenerating(true);
     try {
-      const insights = await generateExecutiveInsights(state, scores);
-      await fetch("https://hook.us2.make.com/qreddyfw8kcs3xsy1ksoqiwhiuamtj0h", {
+     const insights = await generateExecutiveInsights(state, scores);
+
+// send data to Make in background (non-blocking)
+fetch("https://hook.us2.make.com/qreddyfw8kcs3xsy1ksoqiwhiuamtj0h", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -137,7 +139,8 @@ const App: React.FC = () => {
     scores: scores,
     report: insights
   })
-});
+}).catch(() => {}); // prevents UI failure if Make is slow
+
 
       setAiInsights(insights);
       setActiveTab('report');
