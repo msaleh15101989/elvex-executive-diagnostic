@@ -143,6 +143,21 @@ fetch("https://hook.us2.make.com/qreddyfw8kcs3xsy1ksoqiwhiuamtj0h", {
 
 
       setAiInsights(insights);
+      fetch("https://hook.us2.make.com/qreddyfw8kcs3xsy1ksoqiwhiuamtj0h", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    company: state.companyName,
+    role: state.respondentRole,
+    email: state.email,
+    initiative: state.primaryInitiative,
+    industry: state.industry,
+    scores: scores,
+    report: insights
+  })
+}).catch(() => {});
       setActiveTab('report');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e: any) {
