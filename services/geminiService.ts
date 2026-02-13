@@ -7,7 +7,13 @@ export async function generateExecutiveInsights(
   scores: CategoryScore[]
 ): Promise<AIInsights> {
   // Use the API key from process.env.API_KEY
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!apiKey) {
+  throw new Error("Missing VITE_GEMINI_API_KEY");
+}
+
+const ai = new GoogleGenAI({ apiKey });
   
   const scoreSummary = scores.map(s => `${s.title}: ${s.score.toFixed(1)}`).join(", ");
   
