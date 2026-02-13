@@ -123,6 +123,22 @@ const App: React.FC = () => {
     setIsGenerating(true);
     try {
       const insights = await generateExecutiveInsights(state, scores);
+      await fetch("https://hook.us2.make.com/qreddyfw8kcs3xsy1ksoqiwhiuamtj0h", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    company: state.companyName,
+    role: state.respondentRole,
+    email: state.email,
+    initiative: state.primaryInitiative,
+    industry: state.industry,
+    scores: scores,
+    report: insights
+  })
+});
+
       setAiInsights(insights);
       setActiveTab('report');
       window.scrollTo({ top: 0, behavior: 'smooth' });
