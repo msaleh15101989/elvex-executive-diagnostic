@@ -4,7 +4,7 @@ import { Contact, LayerKey, Results } from '../types';
 // Builds the respondent's report as email-safe HTML (tables and inline styles only),
 // so the copy ELVEX receives matches what the respondent saw on screen.
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const V = '#833FFF', V2 = '#6B27D6', INK = '#16131F', BODY = '#4A4658', MUTED = '#8B8597', LINE = '#E7E3F2', SOFT = '#F6F3FF';
+const V = '#7B2CFF', V2 = '#5A1FC4', INK = '#16131F', BODY = '#4A4658', MUTED = '#8B8597', LINE = '#E7E3F2', SOFT = '#F6F3FF';
 
 const bar = (value: number | null, strong: boolean) => {
   const v = Math.max(0, Math.min(100, value ?? 0));
@@ -13,7 +13,7 @@ const bar = (value: number | null, strong: boolean) => {
     <td style="background:#ECE8F6;height:8px;font-size:0;line-height:0">&nbsp;</td></tr></table>`;
 };
 const label = (t: string) => `<p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;color:${V}">${t}</p>`;
-const h2 = (t: string) => `<h2 style="margin:0 0 12px;font-size:20px;color:${INK}">${t}</h2>`;
+const h2 = (t: string) => `<h2 style="margin:0 0 12px;font-family:Montserrat,Arial,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${INK}">${t}</h2>`;
 const section = (inner: string, bg = '#FFFFFF') => `<tr><td style="padding:24px 28px;background:${bg};border-top:1px solid ${LINE}">${inner}</td></tr>`;
 
 export function buildReportHtml(c: Contact, r: Results, reference: string) {
@@ -40,15 +40,15 @@ export function buildReportHtml(c: Contact, r: Results, reference: string) {
     : `<p style="margin:0;font-size:14px;color:${MUTED}">${empty}</p>`;
 
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;border:1px solid ${LINE};border-radius:12px;overflow:hidden">
-  <tr><td style="padding:28px;background:#0C0B11;background-image:linear-gradient(135deg,#0C0B11 0%,#1A1230 100%)">
-    <p style="margin:0 0 18px;font-size:15px;font-weight:bold;color:#F4F2F8">ELVEX <span style="color:${V}">Partners</span></p>
-    <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;color:#B98CFF">Executive Diagnostic report</p>
-    <h1 style="margin:0 0 6px;font-size:28px;color:#F4F2F8">${esc(c.company)}</h1>
-    <p style="margin:0 0 20px;font-size:13px;color:#CBC2F2">Prepared for ${esc(c.fullName)}, ${esc(c.role)} · ${esc(c.industry)}, ${esc(c.country)} · ${date} · Ref ${esc(reference)}</p>
+  <tr><td style="padding:28px;background:#07070A;background-image:linear-gradient(135deg,#07070A 0%,#140B2A 100%)">
+    <p style="margin:0 0 18px;font-size:15px;font-weight:bold;color:#F4F6FF">ELVEX Partners</p>
+    <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;color:#A97BFF">Executive Diagnostic report</p>
+    <h1 style="margin:0 0 6px;font-family:Montserrat,Arial,sans-serif;font-size:26px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#F4F6FF">${esc(c.company)}</h1>
+    <p style="margin:0 0 20px;font-size:13px;color:#D5D7E2">Prepared for ${esc(c.fullName)}, ${esc(c.role)} · ${esc(c.industry)}, ${esc(c.country)} · ${date} · Ref ${esc(reference)}</p>
     <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-      <td valign="middle" style="padding-right:20px;white-space:nowrap"><span style="font-size:56px;font-weight:bold;color:#9B5BFF;line-height:1">${r.overall}</span><span style="font-size:14px;color:#A39EB2"> / 100</span></td>
-      <td valign="middle"><span style="display:inline-block;padding:4px 10px;border:1px solid #9B5BFF;border-radius:999px;font-size:11px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#E6DBFF">${r.band.name}</span>
-        <p style="margin:8px 0 0;font-size:14px;color:#F4F2F8;line-height:1.5">${esc(r.band.summary)}</p></td></tr></table>
+      <td valign="middle" style="padding-right:20px;white-space:nowrap"><span style="font-size:56px;font-weight:bold;color:#9457FF;line-height:1">${r.overall}</span><span style="font-size:14px;color:#A7A9B5"> / 100</span></td>
+      <td valign="middle"><span style="display:inline-block;padding:4px 10px;border:1px solid #9457FF;border-radius:999px;font-size:11px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#ECE6FF">${r.band.name}</span>
+        <p style="margin:8px 0 0;font-size:14px;color:#F4F6FF;line-height:1.5">${esc(r.band.summary)}</p></td></tr></table>
   </td></tr>
   ${section(`${label('Your three layers')}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate"><tr>${layers}</tr></table>`)}
   ${section(`${label('Five areas in detail')}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${areas}</table>
@@ -61,6 +61,6 @@ export function buildReportHtml(c: Contact, r: Results, reference: string) {
   ${section(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
     <td width="50%" valign="top" style="padding-right:12px">${label('Biggest gaps reported')}${list(r.gaps.map(g => g.text), 'No major gaps stood out.', '#F2B880')}</td>
     <td width="50%" valign="top" style="padding-left:12px">${label('Strengths to build on')}${list(r.strengths.map(g => g.text), 'No clear strengths yet.', V2)}</td></tr></table>`)}
-  <tr><td style="padding:16px 28px;background:#0C0B11;font-size:12px;color:#A39EB2">Scores reflect the respondent’s own view of how the organization works today. We elevate clarity, execute change, and evolve organizations. · elvexpartners.com</td></tr>
+  <tr><td style="padding:16px 28px;background:#07070A;font-size:12px;color:#A7A9B5">Scores reflect the respondent’s own view of how the organization works today. We elevate clarity, execute change, and evolve organizations. · elvexpartners.com</td></tr>
 </table>`;
 }

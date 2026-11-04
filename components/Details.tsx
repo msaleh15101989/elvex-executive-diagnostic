@@ -66,7 +66,7 @@ export const Details: React.FC<Props> = ({ contact: c, valid, touched, onChange,
           </fieldset>
 
           <label className={`flex items-start gap-3 text-sm cursor-pointer ${bad('consent') ? 'text-[var(--bad)]' : 'text-[var(--body)]'}`}>
-            <input id="f-consent" type="checkbox" checked={c.consent} onChange={e => onChange('consent', e.target.checked)} className="mt-0.5 w-5 h-5 accent-[#833FFF] shrink-0" />
+            <input id="f-consent" type="checkbox" checked={c.consent} onChange={e => onChange('consent', e.target.checked)} className="mt-0.5 w-5 h-5 accent-[#7B2CFF] shrink-0" />
             <span>ELVEX Partners may store my answers and contact me about my results. My details are never shared with anyone else.</span>
           </label>
 

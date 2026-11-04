@@ -54,7 +54,7 @@ export const Questions: React.FC<Props> = ({ step, answers, onAnswer, onGoTo, on
                 {DOMAINS.map((d, i) => d.layer !== k ? null : (
                   <li key={d.key}>
                     <button onClick={() => onGoTo(i)} aria-current={i === step ? 'step' : undefined}
-                      className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${i === step ? 'bg-[var(--close)] border border-[rgba(131,63,255,.5)] text-[var(--text)]' : 'border border-transparent text-[var(--lav)] hover:bg-[var(--panel)]'}`}>
+                      className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${i === step ? 'bg-[var(--close)] border border-[rgba(123,44,255,.5)] text-[var(--text)]' : 'border border-transparent text-[var(--lav)] hover:bg-[var(--panel)]'}`}>
                       <span className={`w-5 h-5 rounded-full grid place-items-center shrink-0 ${areaDone(i) === d.questions.length ? 'bg-[var(--violet)] text-white' : 'border border-[var(--line3)]'}`}>
                         {areaDone(i) === d.questions.length && <Check className="w-3 h-3" />}
                       </span>

@@ -13,21 +13,21 @@ export const Intro: React.FC<{ resume: boolean; total: number; onStart: () => vo
         <div>
           <p className="kicker">ELVEX Executive Diagnostic</p>
           <h1 className="display mt-4 text-[clamp(2.5rem,6vw,4.4rem)]">How ready is your organization to deliver its strategy?</h1>
-          <p className="lede mt-6">Rate 31 statements about how your organization really works today. You get an instant report showing where strategy, operating model and people are helping or holding back your priorities, and what to fix first.</p>
+          <p className="lede mt-6">Rate 31 statements about how your organization really works today. You get a report by email showing where strategy, operating model and people are helping or holding back your priorities, and what to fix first.</p>
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <button onClick={onStart} className="btn btn-primary text-[1.02rem]">
               {resume ? 'Continue your diagnostic' : 'Start the diagnostic'}<ArrowRight className="w-5 h-5" />
             </button>
             <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[var(--body)]">
               <li className="flex items-center gap-2"><Clock3 className="w-4 h-4 text-[var(--icon)]" />About 10 minutes</li>
-              <li className="flex items-center gap-2"><FileText className="w-4 h-4 text-[var(--icon)]" />Report on screen right away</li>
+              <li className="flex items-center gap-2"><FileText className="w-4 h-4 text-[var(--icon)]" />Full report sent to your inbox</li>
               <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-[var(--icon)]" />Answers stay confidential</li>
             </ul>
           </div>
         </div>
 
         {/* Preview of the report, so people know what they will get */}
-        <figure className="panel p-6 sm:p-7 shadow-[0_30px_80px_-30px_rgba(131,63,255,.45)]" aria-label="Example of the report you will receive">
+        <figure className="panel p-6 sm:p-7 shadow-[0_30px_80px_-30px_rgba(123,44,255,.45)]" aria-label="Example of the report you will receive">
           <figcaption className="flex items-center justify-between text-sm">
             <span className="text-[var(--lav)] font-medium">What your report looks like</span>
             <span className="text-[var(--muted)]">Example</span>
@@ -83,7 +83,7 @@ export const Intro: React.FC<{ resume: boolean; total: number; onStart: () => vo
           {[
             ['Tell us about your organization', 'Your role, sector and the initiative that matters most right now.'],
             ['Rate the statements', 'Answer for how things work today, not how they should. “Not sure” is always an option.'],
-            ['Read your report', 'Scores, your pattern and where to focus first appear as soon as you finish.'],
+            ['Read your report', 'See your headline scores on screen, then get the full report by email.'],
           ].map(([t, d], i) => (
             <li key={t} className="border-t-2 border-[var(--violet)] pt-4">
               <span className="num text-[var(--icon)] font-semibold">Step {i + 1}</span>

@@ -9,7 +9,7 @@ export const LAYER_ICON: Record<LayerKey, React.ReactNode> = {
 };
 
 export const Wordmark: React.FC<{ size?: string }> = ({ size = 'text-lg' }) => (
-  <span className={`font-bold text-[var(--text)] ${size}`}>ELVEX <span className="text-[var(--violet)]">Partners</span></span>
+  <span className={`font-[800] tracking-[.04em] text-[var(--text)] ${size}`} style={{ fontFamily: 'var(--font-head)' }}>ELVEX Partners</span>
 );
 
 export const Bar: React.FC<{ value: number | null; dim?: boolean; bands?: boolean; label?: string }> = ({ value, dim, bands, label }) => (
@@ -25,8 +25,8 @@ export const ScoreRing: React.FC<{ value: number; size?: number }> = ({ value, s
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90" aria-hidden="true">
-        <defs><linearGradient id="ring" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stopColor="#9B5BFF" /><stop offset="1" stopColor="#6B27D6" /></linearGradient></defs>
-        <circle cx="50" cy="50" r={r} fill="none" stroke="#1E1B29" strokeWidth="7" />
+        <defs><linearGradient id="ring" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stopColor="#9457FF" /><stop offset="1" stopColor="#5A1FC4" /></linearGradient></defs>
+        <circle cx="50" cy="50" r={r} fill="none" stroke="#17171F" strokeWidth="7" />
         <circle cx="50" cy="50" r={r} fill="none" stroke="url(#ring)" strokeWidth="7" strokeLinecap="round"
           strokeDasharray={`${c * pct} ${c}`} style={{ transition: 'stroke-dasharray 1.1s cubic-bezier(.2,.7,.2,1)' }} />
       </svg>
@@ -42,7 +42,7 @@ export const ScoreRing: React.FC<{ value: number; size?: number }> = ({ value, s
 
 export const PulseLine: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={`pulse-line w-full ${className ?? ''}`} viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="pl" x1="0" x2="1"><stop offset="0" stopColor="#6B27D6" stopOpacity=".15" /><stop offset=".3" stopColor="#9B5BFF" /><stop offset=".8" stopColor="#9B5BFF" /><stop offset="1" stopColor="#6B27D6" stopOpacity=".15" /></linearGradient></defs>
+    <defs><linearGradient id="pl" x1="0" x2="1"><stop offset="0" stopColor="#5A1FC4" stopOpacity=".15" /><stop offset=".3" stopColor="#9457FF" /><stop offset=".8" stopColor="#9457FF" /><stop offset="1" stopColor="#5A1FC4" stopOpacity=".15" /></linearGradient></defs>
     <path pathLength={1} d="M0 80 H220 L238 80 L254 18 L272 112 L288 80 H520 L536 80 L552 34 L570 104 L586 80 H790 L806 80 L822 10 L842 116 L858 80 H1000"
       fill="none" stroke="url(#pl)" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
   </svg>
