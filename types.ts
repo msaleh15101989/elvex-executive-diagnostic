@@ -1,91 +1,71 @@
-
-export enum RiskLevel {
-  CRITICAL = 'CRITICAL',
-  HIGH = 'HIGH',
-  MODERATE = 'MODERATE',
-  MINOR = 'MINOR',
-  READY = 'READY'
-}
+export type LayerKey = 'elevate' | 'execute' | 'evolve';
 
 export interface Question {
   id: string;
   text: string;
-  category: string;
+  reverse?: boolean;
 }
 
-export interface Section {
+export interface Domain {
   key: string;
-  badge: string;
+  layer: LayerKey;
   title: string;
   description: string;
   questions: Question[];
 }
 
-export interface AssessmentState {
-  meta: {
-    companyName: string;
-    industry: string;
-    initiative: string;
-    respondentRole: string;
-    email: string;
-    mobile: string;
-    date: string;
-  };
-  answers: Record<string, number>;
+export interface Contact {
+  fullName: string;
+  role: string;
+  company: string;
+  email: string;
+  mobile: string;
+  country: string;
+  industry: string;
+  initiative: string;
+  consent: boolean;
 }
 
-export interface CategoryScore {
+export interface SavedState {
+  submissionId: string;
+  contact: Contact;
+  answers: Record<string, number>; // 1..5, or 0 for "not sure"
+}
+
+export interface DomainScore {
   key: string;
   title: string;
-  score: number;
-  riskLevel: RiskLevel;
-  description: string;
+  layer: LayerKey;
+  index: number | null; // 0..100
+  answered: number;
+  total: number;
 }
 
-export interface StrategicInitiative {
-  title: string;
-  priority: 'Critical' | 'High' | 'Medium';
-  rank: number;
-  impact_area: string;
-  executive_summary: string;
-  success_requirements: string[];
+export interface ItemScore {
+  id: string;
+  domain: string;
+  text: string;
+  raw: number;
+  scored: number; // after reverse scoring, 1..5
 }
 
+export interface Results {
+  overall: number;
+  band: { name: string; summary: string };
+  layers: Record<LayerKey, number | null>;
+  domains: DomainScore[];
+  weakest: DomainScore;
+  strongest: DomainScore;
+  pattern: { name: string; description: string };
+  gaps: ItemScore[];
+  strengths: ItemScore[];
+}
+
+// Optional narrative returned by Make when the Gemini step is enabled.
 export interface AIInsights {
-  executive_snapshot: {
-    organizational_condition: string;
-    practical_meaning: string;
-    leadership_risk: string;
-    primary_focus: string;
-  };
-  client_summary: {
-    readiness_index: number;
-    dominant_pattern: string;
-    technology_position: 'Enabler' | 'Support Tool' | 'Administrative Tool' | 'Unused Potential';
-    impact_statement: string;
-    discussion_message: string;
-  };
-  symptoms: string[];
-  future_state: {
-    outcome: string;
-    observable_changes: string[];
-  };
-  consultant_report: {
-    layer_scores: {
-      corporate_strategy: number;
-      business_strategy: number;
-      operating_model: number;
-      execution_behavior: number;
-      technology_integration: number;
-    };
-    execution_dependency: string;
-    behavior_vs_system_gap: string;
-    behavioral_interpretation: string;
-    root_cause_hypothesis: string[];
-    risk_level: 'Low' | 'Medium' | 'High' | 'Critical';
-    intervention_focus: string;
-    structure_vs_effort: string;
-    scaling_stall_risk: string;
-  };
-  strategic_roadmap: StrategicInitiative[];
+  headline?: string;
+  what_it_means?: string;
+  leadership_risk?: string;
+  symptoms?: string[];
+  priorities?: { title: string; why: string; first_step: string }[];
 }

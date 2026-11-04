@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body { background: #0C0B11; }
+body {
+  font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #A39EB2;
+  -webkit-font-smoothing: antialiased;
+}
+.hero {
+  background:
+    radial-gradient(ellipse 60% 70% at 90% 0%, rgba(131,63,255,.22), transparent 60%),
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgba(131,63,255,.14), transparent 60%),
+    linear-gradient(180deg, #0C0B11, #100D18);
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: linear-gradient(90deg, #6B27D6, #833FFF); color: #fff;
+  font-weight: 600; padding: .85rem 1.4rem; border-radius: 999px;
+  border: 1px solid #9B5BFF; transition: transform .15s, filter .15s;
+}
+.btn-primary:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .5rem;
+  color: #CBC2F2; padding: .8rem 1.2rem; border-radius: 999px; border: 1px solid #2A2733;
+}
+.btn-ghost:hover { border-color: #833FFF; color: #F4F2F8; }
+.section-title { color: #F4F2F8; font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid #9B5BFF; outline-offset: 2px; }
+::selection { background: #833FFF; color: #fff; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media print {
+  .no-print { display: none !important; }
+  html, body { background: #0C0B11 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  article { padding-top: 0 !important; }
+  section, header { break-inside: avoid; }
+}
