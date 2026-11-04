@@ -37,9 +37,9 @@ export const Questions: React.FC<Props> = ({ step, answers, onAnswer, onGoTo, on
   };
 
   return (
-    <section className="wrap py-10 sm:py-14 grid lg:grid-cols-[260px,1fr] gap-8 lg:gap-14 items-start">
+    <section className="wrap py-10 sm:py-14 grid grid-cols-1 lg:grid-cols-[260px,1fr] gap-8 lg:gap-14 items-start">
       {/* Area navigation */}
-      <aside className="lg:sticky lg:top-28" aria-label="Areas">
+      <aside className="min-w-0 lg:sticky lg:top-28" aria-label="Areas">
         <div className="flex items-baseline justify-between">
           <span className="text-sm text-[var(--lav)]">Your progress</span>
           <span className="num text-sm text-[var(--muted)]">{done} of {total}</span>
