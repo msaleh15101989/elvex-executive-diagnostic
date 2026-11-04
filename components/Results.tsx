@@ -135,12 +135,12 @@ export const Results: React.FC<Props> = ({ contact: c, results: r, delivered, re
         <div className="wrap py-14 grid lg:grid-cols-[1fr,1fr] gap-10 items-start">
           <div>
             <h2 className="display text-[clamp(1.9rem,3.6vw,2.7rem)]">Talk through your results</h2>
-            <p className="lede mt-4">In a 30 minute debrief, an ELVEX partner walks you through your report and agrees the first moves for {c.company}. No cost and no obligation.</p>
+            <p className="lede mt-4">In a 30 minute debrief, an ELVEX partner walks you through your report and agrees the first moves for {c.company}. It is a paid advisory session, and we’ll confirm the fee before anything is booked.</p>
             <p className="mt-6 text-sm text-[var(--body)]">These scores reflect your own view of how the organization works today. They are a starting point for discussion, not an audit.</p>
           </div>
           <div className="panel p-6 sm:p-7">
             {debrief === 'sent' ? (
-              <div className="flex gap-3 text-[var(--good)]"><CheckCircle2 className="w-6 h-6 shrink-0" /><p><b className="block text-[var(--text)]">Debrief requested</b>We’ll contact you at {c.email} within one working day.</p></div>
+              <div className="flex gap-3 text-[var(--good)]"><CheckCircle2 className="w-6 h-6 shrink-0" /><p><b className="block text-[var(--text)]">Debrief requested</b>We’ll contact you at {c.email} within one working day with times and the fee.</p></div>
             ) : (
               <>
                 <label htmlFor="f-debrief" className="field-label">What would you like the debrief to focus on? (optional)</label>
@@ -148,7 +148,7 @@ export const Results: React.FC<Props> = ({ contact: c, results: r, delivered, re
                   className="field resize-y" />
                 <div className="mt-5 flex flex-wrap gap-3">
                   <button onClick={onDebrief} disabled={debrief === 'sending'} className="btn btn-primary">
-                    {debrief === 'sending' ? <><Loader2 className="w-5 h-5 animate-spin" />Sending request</> : <><Send className="w-5 h-5" />Request a debrief</>}
+                    {debrief === 'sending' ? <><Loader2 className="w-5 h-5 animate-spin" />Sending request</> : <><Send className="w-5 h-5" />Request a paid debrief</>}
                   </button>
                 </div>
                 {debrief === 'error' && <p className="field-error mt-3">The request didn’t go through. Try again, or email contact@elvexpartners.com.</p>}

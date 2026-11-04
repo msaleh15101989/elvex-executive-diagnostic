@@ -85,7 +85,7 @@ export const Details: React.FC<Props> = ({ contact: c, valid, touched, onChange,
         <ul className="space-y-5 text-sm">
           <li className="flex gap-3"><span className="tile w-9 h-9 rounded-xl"><FileText /></span><span><b className="text-[var(--text)] font-semibold block">31 statements in five areas</b>About eight minutes. You can come back later; progress saves on this device.</span></li>
           <li className="flex gap-3"><span className="tile w-9 h-9 rounded-xl"><ShieldCheck /></span><span><b className="text-[var(--text)] font-semibold block">Your report, straight away</b>Scores, your pattern and the area to fix first appear on screen when you finish.</span></li>
-          <li className="flex gap-3"><span className="tile w-9 h-9 rounded-xl"><MessageSquare /></span><span><b className="text-[var(--text)] font-semibold block">An optional debrief</b>If you’d like, an ELVEX partner will walk you through the results. No cost, no obligation.</span></li>
+          <li className="flex gap-3"><span className="tile w-9 h-9 rounded-xl"><MessageSquare /></span><span><b className="text-[var(--text)] font-semibold block">An optional paid debrief</b>If you’d like, an ELVEX partner can walk you through the results and agree next steps. We’ll share the fee before booking.</span></li>
         </ul>
       </aside>
     </section>
