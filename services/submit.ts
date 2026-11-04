@@ -1,5 +1,6 @@
 import { DEBRIEF_WEBHOOK, DOMAINS, INTAKE_WEBHOOK, SCALE } from '../constants';
 import { AIInsights, Results, SavedState } from '../types';
+import { buildReportHtml } from './reportEmail';
 
 const PENDING_KEY = 'elvex_diag_pending_v2';
 
@@ -53,6 +54,7 @@ export function buildPayload(state: SavedState, r: Results) {
     domainScoresText: domainScores.map(d => `${d.domain}: ${d.index ?? 'n/a'}/100`).join('\n'),
     gapsText: r.gaps.map(g => `- ${g.text}`).join('\n'),
     answersText,
+    reportHtml: buildReportHtml(c, r, state.submissionId),
     domainScores,
     answers,
   };
