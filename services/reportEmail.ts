@@ -7,7 +7,10 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const V = '#7B2CFF', V2 = '#5A1FC4', INK = '#16131F', BODY = '#4A4658', MUTED = '#8B8597', LINE = '#E7E3F2', SOFT = '#F6F3FF';
 
 const bar = (value: number | null, strong: boolean) => {
-  const v = Math.max(0, Math.min(100, value ?? 0));
+  const v = Math.round(Math.max(0, Math.min(100, value ?? 0)));
+  // Email clients stretch a 0% cell, so an empty bar is drawn as a single grey track.
+  if (v <= 0) return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr><td style="background:#ECE8F6;height:8px;border-radius:4px;font-size:0;line-height:0">&nbsp;</td></tr></table>`;
+  if (v >= 100) return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr><td style="background:${strong ? V : '#B9A3EE'};height:8px;border-radius:4px;font-size:0;line-height:0">&nbsp;</td></tr></table>`;
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>
     <td width="${v}%" style="background:${strong ? V : '#B9A3EE'};height:8px;border-radius:4px;font-size:0;line-height:0">&nbsp;</td>
     <td style="background:#ECE8F6;height:8px;font-size:0;line-height:0">&nbsp;</td></tr></table>`;
