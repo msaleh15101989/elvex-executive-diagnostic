@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [delivered, setDelivered] = useState(true);
   const [note, setNote] = useState('');
   const [debrief, setDebrief] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [sent, setSent] = useState<'sending' | 'sent' | 'resent' | 'error'>('sending');
 
   useEffect(() => { retryPendingSubmission(); }, []);
   useEffect(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch { /* ignore */ } }, [state]);
@@ -65,7 +66,18 @@ const App: React.FC = () => {
     const res = await submitDiagnostic(buildPayload(state, results));
     setDelivered(res.delivered);
     setInsights(res.insights);
+    setSent(res.delivered ? 'sent' : 'error');
     setPhase('results');
+  };
+
+  // Respondent corrected their email: update it and send the report again (ELVEX is not emailed twice).
+  const resend = async (email: string) => {
+    const next = { ...state, contact: { ...state.contact, email } };
+    setState(next);
+    setSent('sending');
+    const res = await submitDiagnostic({ ...buildPayload(next, results), resend: true } as ReturnType<typeof buildPayload>);
+    if (res.delivered) setDelivered(true);
+    setSent(res.delivered ? 'resent' : 'error');
   };
 
   const sendDebrief = async () => {
@@ -117,7 +129,7 @@ const App: React.FC = () => {
           </section>
         )}
         {phase === 'results' && (
-          <Results contact={c} results={results} insights={insights} delivered={delivered} reference={state.submissionId}
+          <Results contact={c} results={results} delivered={delivered} reference={state.submissionId} sent={sent} onResend={resend}
             note={note} onNote={setNote} debrief={debrief} onDebrief={sendDebrief} />
         )}
       </main>

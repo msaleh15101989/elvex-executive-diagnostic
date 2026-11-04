@@ -1,11 +1,12 @@
-import React from 'react';
-import { AlertTriangle, CheckCircle2, Loader2, Printer, Send, Sparkles, TriangleAlert } from 'lucide-react';
-import { LAYERS, PLAYBOOK } from '../constants';
-import { AIInsights, Contact, LayerKey, Results as R } from '../types';
+import React, { useState } from 'react';
+import { AlertTriangle, CheckCircle2, Loader2, Mail, Send } from 'lucide-react';
+import { LAYERS } from '../constants';
+import { Contact, LayerKey, Results as R } from '../types';
 import { Bar, LAYER_ICON, PulseLine, ScoreRing } from './ui';
 
 interface Props {
-  contact: Contact; results: R; insights: AIInsights | null; delivered: boolean; reference: string;
+  contact: Contact; results: R; delivered: boolean; reference: string;
+  sent: 'sending' | 'sent' | 'resent' | 'error'; onResend: (email: string) => void;
   note: string; onNote: (s: string) => void; debrief: 'idle' | 'sending' | 'sent' | 'error'; onDebrief: () => void;
 }
 
@@ -14,9 +15,11 @@ const BANDS = [
   { name: 'Established', range: '60 to 79' }, { name: 'Leading', range: '80 to 100' },
 ];
 
-export const Results: React.FC<Props> = ({ contact: c, results: r, insights, delivered, reference, note, onNote, debrief, onDebrief }) => {
+export const Results: React.FC<Props> = ({ contact: c, results: r, delivered, reference, sent, onResend, note, onNote, debrief, onDebrief }) => {
+  const [editing, setEditing] = useState(false);
+  const [email, setEmail] = useState(c.email);
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
   const focusLayer = r.weakest.layer;
-  const play = PLAYBOOK[r.weakest.key];
   const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
@@ -25,7 +28,7 @@ export const Results: React.FC<Props> = ({ contact: c, results: r, insights, del
         <div className="wrap pt-6 no-print">
           <div className="rounded-2xl border border-[#6B5420] bg-[#211A0C] text-[#F2D58A] p-4 text-sm flex gap-3">
             <AlertTriangle className="w-5 h-5 shrink-0" />
-            <span>Your report is ready, but it couldn’t be saved to ELVEX just now. It is kept on this device and will be sent automatically the next time you open this page.</span>
+            <span>We couldn’t reach our server just now, so your report hasn’t been emailed yet. Your answers are kept on this device and will be sent automatically the next time you open this page.</span>
           </div>
         </div>
       )}
@@ -84,103 +87,54 @@ export const Results: React.FC<Props> = ({ contact: c, results: r, insights, del
           </div>
         </section>
 
-        {/* Areas */}
-        <section className="grid lg:grid-cols-[1.4fr,1fr] gap-10 lg:gap-14 print-break">
+        {/* Full report by email */}
+        <section className="panel-violet p-7 sm:p-10 grid lg:grid-cols-[1fr,1.1fr] gap-8 lg:gap-12">
           <div>
-            <h2 className="h2">Five areas in detail</h2>
-            <p className="mt-2 text-[var(--body)]">Dashed lines mark the band thresholds at 40, 60 and 80.</p>
-            <ul className="mt-7 space-y-6">
-              {[...r.domains].sort((a, b) => (a.index ?? 0) - (b.index ?? 0)).map(d => (
-                <li key={d.key}>
-                  <div className="flex items-baseline justify-between gap-4 mb-2">
-                    <span className="text-[var(--text)]">{d.title} <span className="text-sm text-[var(--muted)]">{LAYERS[d.layer].title}</span></span>
-                    <span className="num font-semibold text-[var(--text)]">{d.index ?? 'n/a'}</span>
-                  </div>
-                  <Bar value={d.index} bands dim={d.key !== r.weakest.key} />
-                  {d.answered < d.total && <p className="text-xs text-[var(--muted)] mt-1.5">{d.total - d.answered} answered “Not sure”, not included in the score</p>}
-                </li>
-              ))}
-            </ul>
+            <div className="tile"><Mail className="w-5 h-5" /></div>
+            <p className="kicker mt-5">Your full report</p>
+            <h2 className="display mt-2 text-[clamp(1.7rem,3.2vw,2.4rem)]">{sent === 'error' ? 'We couldn’t send your report yet' : 'Your full report is on its way to your inbox'}</h2>
+            <p className="mt-4 text-[var(--lav)] text-lg leading-relaxed">
+              {sent === 'error'
+                ? 'Please check your email address below and try again.'
+                : <>We’ve emailed the complete report for {c.company} to <b className="text-[var(--text)] break-all">{c.email}</b>. It usually arrives within a few minutes. If you can’t see it, check your junk folder.</>}
+            </p>
           </div>
-          <div className="panel p-6 sm:p-7 self-start">
-            <p className="kicker">Your pattern</p>
-            <h3 className="mt-2 text-[var(--text)] text-2xl font-bold leading-tight">{r.pattern.name}</h3>
-            <p className="mt-3 text-[var(--lav)] leading-relaxed">{r.pattern.description}</p>
+          <div>
+            <p className="text-sm font-semibold text-[var(--text)]">What’s inside</p>
+            <ul className="mt-3 space-y-3">
+              {[
+                'Your scores for all five areas, from weakest to strongest',
+                'Your organization’s pattern and what it means day to day',
+                `Where to focus first, with three ELVEX actions for ${r.weakest.title.toLowerCase()}`,
+                'The biggest gaps and strengths in your answers',
+              ].map(t => <li key={t} className="flex gap-3 text-[var(--lav)]"><CheckCircle2 className="w-5 h-5 shrink-0 text-[var(--icon)] mt-0.5" />{t}</li>)}
+            </ul>
             <div className="rule my-6" />
-            <dl className="grid grid-cols-2 gap-5 text-sm">
-              <div><dt className="text-[var(--muted)]">Strongest area</dt><dd className="mt-1 text-[var(--text)] font-medium">{r.strongest.title}</dd></div>
-              <div><dt className="text-[var(--muted)]">Weakest area</dt><dd className="mt-1 text-[var(--text)] font-medium">{r.weakest.title}</dd></div>
-            </dl>
-          </div>
-        </section>
-
-        {/* Focus */}
-        <section className="panel-violet p-7 sm:p-10 grid lg:grid-cols-[1fr,1.3fr] gap-8 lg:gap-12 print-break">
-          <div>
-            <p className="kicker">Where to focus first</p>
-            <h2 className="display mt-2 text-[clamp(1.8rem,3.4vw,2.5rem)]">{r.weakest.title}</h2>
-            <p className="mt-4 text-[var(--lav)] text-lg leading-relaxed">{play.outcome}</p>
-          </div>
-          <ol className="space-y-5">
-            {play.actions.map((a, i) => (
-              <li key={i} className="flex gap-4">
-                <span className="num w-9 h-9 shrink-0 rounded-full bg-[var(--violet)] text-white font-semibold grid place-items-center">{i + 1}</span>
-                <p className="text-[var(--text)] leading-relaxed pt-1">{a}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* Gaps and strengths */}
-        <section className="grid md:grid-cols-2 gap-10 print-break">
-          <div>
-            <h2 className="h3 flex items-center gap-2"><TriangleAlert className="w-5 h-5 text-[var(--warn)]" />Biggest gaps you reported</h2>
-            <ul className="mt-4 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-              {r.gaps.length ? r.gaps.map(g => <li key={g.id} className="py-3.5 text-[var(--lav)] leading-relaxed">{g.text}</li>)
-                : <li className="py-3.5 text-[var(--body)]">No major gaps stood out in your answers.</li>}
-            </ul>
-          </div>
-          <div>
-            <h2 className="h3 flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-[var(--good)]" />Strengths to build on</h2>
-            <ul className="mt-4 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-              {r.strengths.length ? r.strengths.map(g => <li key={g.id} className="py-3.5 text-[var(--lav)] leading-relaxed">{g.text}</li>)
-                : <li className="py-3.5 text-[var(--body)]">No clear strengths yet, which is common during heavy change.</li>}
-            </ul>
-          </div>
-        </section>
-
-        {insights && (
-          <section className="panel p-7 sm:p-9 print-break">
-            <p className="kicker flex items-center gap-2"><Sparkles className="w-4 h-4" />What this means for {c.company}</p>
-            {insights.headline && <h2 className="h2 mt-2">{insights.headline}</h2>}
-            {insights.what_it_means && <p className="mt-3 text-[var(--lav)] leading-relaxed max-w-3xl">{insights.what_it_means}</p>}
-            {insights.leadership_risk && <p className="mt-3 text-[var(--text)] max-w-3xl"><b className="text-[var(--icon)]">Leadership risk:</b> {insights.leadership_risk}</p>}
-            {!!insights.symptoms?.length && (
-              <ul className="mt-5 grid sm:grid-cols-2 gap-2 text-sm text-[var(--lav)]">
-                {insights.symptoms.map((s, i) => <li key={i} className="rounded-xl bg-[var(--panel2)] border border-[var(--line)] px-4 py-3">{s}</li>)}
-              </ul>
+            {editing ? (
+              <form onSubmit={e => { e.preventDefault(); if (emailOk) { onResend(email.trim()); setEditing(false); } }} className="space-y-3">
+                <label htmlFor="f-resend" className="field-label">Correct email address</label>
+                <input id="f-resend" type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} className={`field ${email && !emailOk ? 'invalid' : ''}`} />
+                <div className="flex flex-wrap gap-3">
+                  <button type="submit" disabled={!emailOk} className="btn btn-primary"><Send className="w-4 h-4" />Send my report</button>
+                  <button type="button" onClick={() => setEditing(false)} className="btn btn-quiet">Cancel</button>
+                </div>
+              </form>
+            ) : (
+              <p className="text-sm text-[var(--body)]">
+                {sent === 'sending' ? <span className="inline-flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Sending your report</span>
+                  : sent === 'resent' ? <span className="text-[var(--good)]">Sent again to {c.email}.</span> : 'Wrong address? '}
+                {sent !== 'sending' && <button onClick={() => { setEmail(c.email); setEditing(true); }} className="underline underline-offset-4 text-[var(--text)] hover:text-[var(--icon)]">Correct it and resend</button>}
+              </p>
             )}
-            {!!insights.priorities?.length && (
-              <ol className="mt-6 grid md:grid-cols-3 gap-4">
-                {insights.priorities.slice(0, 3).map((p, i) => (
-                  <li key={i} className="rounded-2xl border border-[var(--tile-line)] bg-[var(--panel2)] p-5">
-                    <span className="num text-[var(--icon)] text-sm font-semibold">Priority {i + 1}</span>
-                    <h3 className="h3 mt-1">{p.title}</h3>
-                    <p className="text-sm text-[var(--body)] mt-2">{p.why}</p>
-                    <p className="text-sm text-[var(--lav)] mt-3"><b>First step:</b> {p.first_step}</p>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </section>
-        )}
+          </div>
+        </section>
       </div>
 
       {/* Call to action */}
       <section className="cover-bg border-t border-[var(--line)] no-print">
         <div className="wrap py-14 grid lg:grid-cols-[1fr,1fr] gap-10 items-start">
           <div>
-            <h2 className="display text-[clamp(1.9rem,3.6vw,2.7rem)]">Turn these results into a plan</h2>
+            <h2 className="display text-[clamp(1.9rem,3.6vw,2.7rem)]">Talk through your results</h2>
             <p className="lede mt-4">In a 30 minute debrief, an ELVEX partner walks you through your report and agrees the first moves for {c.company}. No cost and no obligation.</p>
             <p className="mt-6 text-sm text-[var(--body)]">These scores reflect your own view of how the organization works today. They are a starting point for discussion, not an audit.</p>
           </div>
@@ -196,7 +150,6 @@ export const Results: React.FC<Props> = ({ contact: c, results: r, insights, del
                   <button onClick={onDebrief} disabled={debrief === 'sending'} className="btn btn-primary">
                     {debrief === 'sending' ? <><Loader2 className="w-5 h-5 animate-spin" />Sending request</> : <><Send className="w-5 h-5" />Request a debrief</>}
                   </button>
-                  <button onClick={() => window.print()} className="btn btn-quiet"><Printer className="w-4 h-4" />Save as PDF</button>
                 </div>
                 {debrief === 'error' && <p className="field-error mt-3">The request didn’t go through. Try again, or email contact@elvexpartners.com.</p>}
               </>
